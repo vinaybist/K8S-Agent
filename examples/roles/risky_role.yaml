@@ -1,0 +1,175 @@
+# Risky Kubernetes Role Examples  
+# These roles contain security issues and should trigger KubeGuard warnings
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: wildcard-nightmare
+  namespace: test-app
+  annotations:
+    kubeguard.io/purpose: "BAD EXAMPLE - Complete wildcard access"
+    kubeguard.io/expected-issues: "Critical security violations"
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["*"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: secret-destroyer
+  namespace: test-app
+  annotations:
+    kubeguard.io/purpose: "BAD EXAMPLE - Unrestricted secret access"
+    kubeguard.io/expected-issues: "High risk - wildcard verbs on secrets"
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: container-escape-risk
+  namespace: test-app
+  annotations:
+    kubeguard.io/purpose: "BAD EXAMPLE - Dangerous subresource access"
+    kubeguard.io/expected-issues: "Container escape vectors enabled"
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+- apiGroups: [""]
+  resources: ["pods/exec", "pods/portforward", "pods/attach"]
+  verbs: ["create"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: privilege-escalation-risk
+  namespace: test-app
+  annotations:
+    kubeguard.io/purpose: "BAD EXAMPLE - Can modify RBAC objects"
+    kubeguard.io/expected-issues: "Privilege escalation through RBAC modification"
+rules:
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["roles", "rolebindings"]
+  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["serviceaccounts"]
+  verbs: ["create", "update", "patch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: overprivileged-app
+  namespace: test-app
+  annotations:
+    kubeguard.io/purpose: "BAD EXAMPLE - Excessive permissions for simple app"
+    kubeguard.io/expected-issues: "Violates principle of least privilege"
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "endpoints", "configmaps", "secrets"]
+  verbs: ["*"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets", "daemonsets"]
+  verbs: ["*"]
+- apiGroups: ["extensions"]
+  resources: ["ingresses"]
+  verbs: ["*"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: dangerous-delete-permissions
+  namespace: test-app
+  annotations:
+    kubeguard.io/purpose: "BAD EXAMPLE - Unnecessary delete permissions"
+    kubeguard.io/expected-issues: "High risk delete operations on critical resources"
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps"]
+  verbs: ["get", "list", "delete"]
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["delete"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: network-policy-manipulator
+  namespace: test-app
+  annotations:
+    kubeguard.io/purpose: "BAD EXAMPLE - Can modify network security policies"
+    kubeguard.io/expected-issues: "Can bypass network security controls"
+rules:
+- apiGroups: ["networking.k8s.io"]
+  resources: ["networkpolicies"]
+  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: mixed-risk-role
+  namespace: test-app
+  annotations:
+    kubeguard.io/purpose: "BAD EXAMPLE - Mix of good and bad permissions"
+    kubeguard.io/expected-issues: "Some secure patterns mixed with risky ones"
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]  # Good - specific read permissions
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["*"]  # Bad - wildcard on configmaps
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "update", "patch"]  # Moderate - write access
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get"]  # Risky but limited - secret read access
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: api-discovery-abuse
+  namespace: test-app
+  annotations:
+    kubeguard.io/purpose: "BAD EXAMPLE - Excessive API discovery permissions"
+    kubeguard.io/expected-issues: "Unnecessary broad API access"
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["get", "list"]  # Still risky even without write access
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: resource-quota-bypass
+  namespace: test-app
+  annotations:
+    kubeguard.io/purpose: "BAD EXAMPLE - Can manipulate resource quotas"
+    kubeguard.io/expected-issues: "Can bypass resource restrictions"
+rules:
+- apiGroups: [""]
+  resources: ["resourcequotas", "limitranges"]
+  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["create", "update"]

@@ -1,0 +1,145 @@
+# Sample Kubernetes Roles for testing KubeGuard analysis
+
+---
+# Secure Role Example - Read-only pod access
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: secure-pod-reader
+  namespace: test-app
+  annotations:
+    kubeguard.io/purpose: "Read-only access to pods for monitoring"
+    kubeguard.io/expected-score: "95"
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+
+---
+# Moderately Secure Role - Config management
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: config-manager
+  namespace: test-app
+  annotations:
+    kubeguard.io/purpose: "Manage configmaps and read pods"
+    kubeguard.io/expected-score: "80"
+rules:
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["get", "list", "create", "update", "patch", "delete"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+
+---
+# Risky Role - Secret access
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: risky-secret-manager
+  namespace: test-app
+  annotations:
+    kubeguard.io/purpose: "Manages secrets - should trigger security warnings"
+    kubeguard.io/expected-score: "60"
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+
+---
+# Dangerous Role - Container execution access
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: dangerous-pod-exec
+  namespace: test-app
+  annotations:
+    kubeguard.io/purpose: "Dangerous - allows pod exec and portforward"
+    kubeguard.io/expected-score: "30"
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+- apiGroups: [""]
+  resources: ["pods/exec", "pods/portforward"]
+  verbs: ["create"]
+
+---
+# Critical Risk Role - Complete wildcard access
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: critical-wildcard-role
+  namespace: test-app
+  annotations:
+    kubeguard.io/purpose: "Critical security risk - wildcard permissions"
+    kubeguard.io/expected-score: "0"
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["*"]
+
+---
+# Mixed Risk Role - Some good, some bad permissions
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: mixed-permissions-role
+  namespace: test-app
+  annotations:
+    kubeguard.io/purpose: "Mixed risk - good and bad permissions combined"
+    kubeguard.io/expected-score: "45"
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]  # Good - specific read permissions
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["*"]  # Bad - wildcard on sensitive resource
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "update"]  # Moderate - write access to deployments
+
+---
+# Over-Privileged Role - Many unnecessary permissions
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: over-privileged-role
+  namespace: test-app
+  annotations:
+    kubeguard.io/purpose: "Over-privileged - more permissions than needed"
+    kubeguard.io/expected-score: "35"
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "endpoints"]
+  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["secrets", "configmaps"]
+  verbs: ["get", "list", "create", "update", "patch", "delete"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["*"]
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["roles", "rolebindings"]
+  verbs: ["get", "list", "create", "update"]
+
+---
+# Minimal Role - Bare minimum permissions
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: minimal-role
+  namespace: test-app
+  annotations:
+    kubeguard.io/purpose: "Minimal permissions - just pod get"
+    kubeguard.io/expected-score: "98"
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get"]

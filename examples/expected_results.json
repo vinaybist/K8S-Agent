@@ -1,0 +1,197 @@
+{
+  "test_expectations": {
+    "secure-pod-reader": {
+      "expected_score_range": [90, 100],
+      "expected_risk_level": "low",
+      "expected_issues": 0,
+      "expected_recommendations_contain": ["Role follows security best practices"]
+    },
+    "config-manager": {
+      "expected_score_range": [75, 85],
+      "expected_risk_level": "low",
+      "expected_issues": 0,
+      "expected_recommendations_contain": ["Review access to sensitive resources"]
+    },
+    "risky-secret-manager": {
+      "expected_score_range": [55, 65],
+      "expected_risk_level": "medium",
+      "expected_issues": 1,
+      "expected_recommendations_contain": ["Replace wildcard permissions", "Review access to sensitive resources"]
+    },
+    "dangerous-pod-exec": {
+      "expected_score_range": [25, 35],
+      "expected_risk_level": "high",
+      "expected_issues": 2,
+      "expected_recommendations_contain": ["Remove access to", "dangerous subresource"]
+    },
+    "critical-wildcard-role": {
+      "expected_score_range": [0, 10],
+      "expected_risk_level": "critical",
+      "expected_issues": 3,
+      "expected_recommendations_contain": ["CRITICAL", "Remove wildcard permissions"]
+    },
+    "mixed-permissions-role": {
+      "expected_score_range": [40, 50],
+      "expected_risk_level": "medium",
+      "expected_issues": 1,
+      "expected_recommendations_contain": ["Replace wildcard permissions"]
+    },
+    "over-privileged-role": {
+      "expected_score_range": [30, 40],
+      "expected_risk_level": "high",
+      "expected_issues": 4,
+      "expected_recommendations_contain": ["Apply principle of least privilege"]
+    },
+    "minimal-role": {
+      "expected_score_range": [95, 100],
+      "expected_risk_level": "low",
+      "expected_issues": 0,
+      "expected_recommendations_contain": ["Role follows security best practices"]
+    }
+  },
+  "security_patterns": {
+    "wildcard_verbs": {
+      "pattern": "verbs: ['*']",
+      "risk_level": "high",
+      "score_impact": -20,
+      "detection_method": "rule_based"
+    },
+    "wildcard_resources": {
+      "pattern": "resources: ['*']",
+      "risk_level": "critical", 
+      "score_impact": -25,
+      "detection_method": "rule_based"
+    },
+    "wildcard_api_groups": {
+      "pattern": "apiGroups: ['*']",
+      "risk_level": "high",
+      "score_impact": -15,
+      "detection_method": "rule_based"
+    },
+    "dangerous_subresources": {
+      "patterns": ["pods/exec", "pods/portforward", "pods/attach"],
+      "risk_level": "high",
+      "score_impact": -15,
+      "detection_method": "rule_based"
+    },
+    "sensitive_resources": {
+      "patterns": ["secrets", "configmaps", "serviceaccounts"],
+      "risk_level": "medium",
+      "score_impact": -10,
+      "detection_method": "rule_based"
+    }
+  },
+  "llm_prompt_chain_expectations": {
+    "step_1_role_understanding": {
+      "expected_keys": [
+        "role_identity",
+        "permission_structure", 
+        "initial_security_observations"
+      ],
+      "validation": "JSON structure with role metadata analysis"
+    },
+    "step_2_permission_analysis": {
+      "expected_keys": [
+        "excessive_permissions",
+        "privilege_escalation_risks",
+        "sensitive_resource_exposure",
+        "security_score"
+      ],
+      "validation": "Deep security analysis with risk assessment"
+    },
+    "step_3_runtime_correlation": {
+      "expected_keys": [
+        "usage_analysis",
+        "over_privilege_assessment", 
+        "usage_recommendations"
+      ],
+      "validation": "Runtime usage correlation analysis"
+    },
+    "step_4_risk_assessment": {
+      "expected_keys": [
+        "overall_risk_assessment",
+        "risk_breakdown",
+        "compliance_issues",
+        "blast_radius"
+      ],
+      "validation": "Comprehensive risk scoring and assessment"
+    },
+    "step_5_recommendation_generation": {
+      "expected_keys": [
+        "immediate_actions",
+        "permission_refinements",
+        "hardened_role_manifest",
+        "monitoring_recommendations"
+      ],
+      "validation": "Actionable security recommendations"
+    }
+  },
+  "runtime_usage_simulation": {
+    "high_frequency_operations": [
+      "get:pods",
+      "list:pods", 
+      "watch:pods"
+    ],
+    "medium_frequency_operations": [
+      "create:configmaps",
+      "update:configmaps",
+      "patch:deployments"
+    ],
+    "low_frequency_operations": [
+      "delete:pods",
+      "delete:configmaps",
+      "create:secrets"
+    ],
+    "frequency_ranges": {
+      "read_operations": [100, 200],
+      "write_operations": [20, 60],
+      "delete_operations": [1, 15]
+    }
+  },
+  "hardening_expectations": {
+    "wildcard_removal": {
+      "before": {"verbs": ["*"]},
+      "after": {"verbs": ["get", "list", "watch"]},
+      "improvement": "Replaced wildcard verbs with specific read operations"
+    },
+    "resource_restriction": {
+      "before": {"resources": ["*"]},
+      "after": {"resources": ["pods", "configmaps"]},
+      "improvement": "Replaced wildcard resources with specific safe resources"
+    },
+    "dangerous_subresource_removal": {
+      "before": {"resources": ["pods/exec", "pods/portforward"]},
+      "after": {"resources": []},
+      "improvement": "Removed dangerous subresources"
+    }
+  },
+  "validation_thresholds": {
+    "excellent_security": {
+      "min_score": 90,
+      "max_critical_issues": 0,
+      "max_high_issues": 0,
+      "status": "PASS"
+    },
+    "good_security": {
+      "min_score": 70,
+      "max_critical_issues": 0,
+      "max_high_issues": 1,
+      "status": "PASS"
+    },
+    "acceptable_security": {
+      "min_score": 50,
+      "max_critical_issues": 0,
+      "max_high_issues": 2,
+      "status": "CONDITIONAL_PASS"
+    },
+    "poor_security": {
+      "min_score": 30,
+      "max_critical_issues": 1,
+      "status": "FAIL"
+    },
+    "critical_security": {
+      "min_score": 0,
+      "status": "CRITICAL_FAIL"
+    }
+  }
+}
