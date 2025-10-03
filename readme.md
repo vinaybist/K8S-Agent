@@ -119,7 +119,6 @@ SCORING CRITERIA:
 
 [... continues with risk factors and JSON structure ...]"""
 
-```
 5. Recommendation Generation (Step 5)
 ```
 f"""TASK: Generate specific, actionable security recommendations based on comprehensive analysis.
