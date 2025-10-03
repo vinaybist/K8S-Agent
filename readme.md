@@ -6,6 +6,13 @@ A Model Context Protocol (MCP) server for Kubernetes Role security analysis usin
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## TestRun:
+MCP server :
+$_python -m kubeguard.main_
+
+Standalone Test:
+$python .\examples\fastmcp_demo.py
+
 ## Citation
 
 If you use KubeGuard in your research, please cite the original paper:
