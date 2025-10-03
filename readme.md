@@ -66,6 +66,9 @@ Security score (0-100)
 Risk level (low/medium/high/critical)
 Security issues found
 Recommendations
+```
+
+# Prompt Chaining in detail
 
 ```
 1. Role Understanding (Step 1)
