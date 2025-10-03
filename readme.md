@@ -26,6 +26,18 @@ rules:
   verbs: ["*"]
 ```
 
+```
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: developer-access
+  namespace: production
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+```
+
 ## Citation
 
 If you use KubeGuard in your research, please cite the original paper:
