@@ -37,7 +37,7 @@ ROLE MANIFEST:
 ```yaml
 {json.dumps(role_manifest, indent=2)}
 ```
-2. ## 2. Permission Analysis (Step 2)
+2. Permission Analysis (Step 2)
 ```python
 f"""TASK: Perform comprehensive security analysis of the permissions identified in Step 1.
 
@@ -75,3 +75,24 @@ Provide JSON response:
     "security_score": 45,
     "critical_issues": [...]
 }}"""
+
+
+3.
+f"""TASK: Correlate static permissions with actual runtime usage patterns.
+
+STATIC PERMISSION ANALYSIS:
+{json.dumps(permission_analysis, indent=2)}
+
+RUNTIME AUDIT LOGS SAMPLE:
+{logs_sample}
+CORRELATION ANALYSIS:
+Analyze the gap between granted permissions and actual usage:
+
+1. **Usage Patterns**: Which permissions are actively used?
+2. **Frequency Analysis**: How often is each permission exercised?
+3. **Unused Permissions**: What permissions are granted but never used?
+4. **Over-Privileged Access**: Where are permissions excessive relative to usage?
+
+[... continues with detailed instructions ...]"""
+
+
