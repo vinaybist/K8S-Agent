@@ -75,7 +75,7 @@ Provide JSON response:
     "security_score": 45,
     "critical_issues": [...]
 }}"""
-
+```
 
 3.Runtime Correlation (Step 3)
 ```
