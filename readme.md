@@ -26,36 +26,33 @@ If you use KubeGuard in your research, please cite the original paper:
 ```
 
 ## Prompt Chaining:
-How It Works
-Execution Flow
+# How It Works
 
-Server Initialization
+## Execution Flow
 
-Loads configuration from .env
-Validates LLM setup
-Starts FastMCP server
+### 1. Server Initialization
+- Loads configuration from `.env`
+- Validates LLM setup
+- Starts FastMCP server
 
+### 2. Client Connects (via MCP protocol)
+- AI agents (like Claude Desktop, IDEs with MCP support)
+- Connect to the server using MCP protocol
 
-Client Connects (via MCP protocol)
+### 3. Analysis Request
+```python
+# Client calls the tool
+analyze_role_security({
+    "role_manifest": {
+        "apiVersion": "rbac.authorization.k8s.io/v1",
+        "kind": "Role",
+        "metadata": {"name": "example", "namespace": "default"},
+        "rules": [...]
+    },
+    "runtime_logs": ["log1", "log2"]  # optional
+})
 
-AI agents (like Claude Desktop, IDEs with MCP support)
-Connect to the server using MCP protocol
-
-
-Analysis Request
-
-python   # Client calls the tool
-   analyze_role_security({
-       "role_manifest": {
-           "apiVersion": "rbac.authorization.k8s.io/v1",
-           "kind": "Role",
-           "metadata": {"name": "example", "namespace": "default"},
-           "rules": [...]
-       },
-       "runtime_logs": ["log1", "log2"]  # optional
-   })
-
-5-Step LLM Chain Execution
+4. 5-Step LLM Chain Execution
 
 Step 1: Role understanding → LLM call
 Step 2: Permission analysis → LLM call (uses Step 1 results)
@@ -63,8 +60,7 @@ Step 3: Runtime correlation → LLM call (uses Step 1-2 results)
 Step 4: Risk assessment → LLM call (uses Step 1-3 results)
 Step 5: Recommendations → LLM call (uses all previous results)
 
-
-Results Returned
+5. Results Returned
 
 Security score (0-100)
 Risk level (low/medium/high/critical)
