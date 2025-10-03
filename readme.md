@@ -77,7 +77,8 @@ Provide JSON response:
 }}"""
 
 
-3.
+3.Runtime Correlation (Step 3)
+```
 f"""TASK: Correlate static permissions with actual runtime usage patterns.
 
 STATIC PERMISSION ANALYSIS:
@@ -94,5 +95,7 @@ Analyze the gap between granted permissions and actual usage:
 4. **Over-Privileged Access**: Where are permissions excessive relative to usage?
 
 [... continues with detailed instructions ...]"""
+
+```
 
 
