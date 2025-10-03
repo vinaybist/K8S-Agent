@@ -71,8 +71,8 @@ If you use KubeGuard in your research, please cite the original paper:
 - Starts FastMCP server
 
 ### 2. Client Connects (via MCP protocol)
-- AI agents (like Claude Desktop, IDEs with MCP support)
-- Connect to the server using MCP protocol
+- AI agents (like Claude Desktop, IDEs with MCP support) - <<TO-DO>>
+- Connect to the server using MCP protocol - <<TO DO>>
 
 ### 3. Analysis Request
 ```python
