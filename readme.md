@@ -97,5 +97,45 @@ Analyze the gap between granted permissions and actual usage:
 [... continues with detailed instructions ...]"""
 
 ```
+4. Risk Assessment (Step 4)
+f"""TASK: Synthesize comprehensive security risk assessment combining static and runtime analysis.
 
+STATIC ANALYSIS RESULTS:
+{json.dumps(permission_analysis, indent=2)}
 
+RUNTIME ANALYSIS RESULTS:
+{json.dumps(runtime_correlation, indent=2)}
+
+RISK ASSESSMENT METHODOLOGY:
+Calculate overall risk score (0-100, where 100 is most secure) considering:
+
+SCORING CRITERIA:
+- Base score: 100
+- Wildcard permissions: -20 points each
+- Unused high-risk permissions: -15 points each
+- Excessive privileges: -10 points each
+- Sensitive resource access: -10 points per resource type
+- Critical security issues: -25 points each
+
+[... continues with risk factors and JSON structure ...]"""
+
+```
+5. Recommendation Generation (Step 5)
+```
+f"""TASK: Generate specific, actionable security recommendations based on comprehensive analysis.
+
+RISK ASSESSMENT:
+{json.dumps(risk_assessment, indent=2)}
+
+RUNTIME USAGE ANALYSIS:
+{json.dumps(runtime_correlation, indent=2)}
+
+RECOMMENDATION FRAMEWORK:
+Generate recommendations across these categories:
+1. **Immediate Actions** (Critical/High priority)
+2. **Permission Refinements** (Specific changes)
+3. **Hardened Configuration** (Minimal viable permissions)
+4. **Monitoring & Alerting** (Ongoing security)
+5. **Implementation Plan** (Step-by-step execution)
+
+[... continues with detailed structure for recommendations ...]"""
