@@ -13,6 +13,19 @@ $K8S_Agent> python -m kubeguard.main --http
 Standalone Test:
 $python .\examples\fastmcp_demo.py
 
+Sample Role: Overly permissive developer role
+```
+# Before: Overly permissive developer role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: dev-access
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["*"]
+```
+
 ## Citation
 
 If you use KubeGuard in your research, please cite the original paper:
