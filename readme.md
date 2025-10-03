@@ -16,26 +16,36 @@ $python .\examples\fastmcp_demo.py
 Sample Role: Overly permissive developer role
 ```
 # Before: Overly permissive developer role
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: dev-access
-rules:
-- apiGroups: ["*"]
-  resources: ["*"]
-  verbs: ["*"]
+{
+    "role_manifest": {
+        "apiVersion": "rbac.authorization.k8s.io/v1",
+        "kind": "Role",
+        "metadata": {"name": "test", "namespace": "default"},
+        "rules": [{
+            "apiGroups": ["*"],
+            "resources": ["*"],
+            "verbs": ["*"]
+        }]
+    }
+}
 ```
 
 ```
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: developer-access
-  namespace: production
-rules:
-  - apiGroups: [""]
-    resources: ["secrets"]
-    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+{
+  "apiVersion": "rbac.authorization.k8s.io/v1",
+  "kind": "Role",
+  "metadata": {
+    "name": "developer-access",
+    "namespace": "production"
+  },
+  "rules": [
+    {
+      "apiGroups": [""],
+      "resources": ["secrets"],
+      "verbs": ["get", "list", "watch", "create", "update", "patch", "delete"]
+    }
+  ]
+}
 ```
 
 ## Citation
