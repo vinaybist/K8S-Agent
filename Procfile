@@ -1,1 +1,1 @@
-web: python kubeguard.main --http
+web: python -m kubeguard.main --http
