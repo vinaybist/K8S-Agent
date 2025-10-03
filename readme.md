@@ -24,3 +24,54 @@ If you use KubeGuard in your research, please cite the original paper:
   year={2025}
 }
 ```
+
+## Prompt Chaining:
+
+1. Role Understanding (Step 1)
+```
+f"""You are KubeGuard, an AI security analyst specializing in Kubernetes RBAC analysis.
+
+TASK: Analyze this Kubernetes Role and provide structured understanding of its permissions and purpose.
+
+ROLE MANIFEST:
+```yaml
+{json.dumps(role_manifest, indent=2)}
+```
+2. ## 2. Permission Analysis (Step 2)
+```python
+f"""TASK: Perform comprehensive security analysis of the permissions identified in Step 1.
+
+PREVIOUS ANALYSIS:
+{json.dumps(role_understanding, indent=2)}
+
+SECURITY ANALYSIS FRAMEWORK:
+1. **Excessive Permissions**: Identify overly broad access patterns
+   - Wildcard (*) usage in verbs, resources, or apiGroups
+   - Access beyond apparent use case requirements
+   
+2. **Privilege Escalation Risks**: Assess potential for privilege escalation
+   - Access to RBAC resources (roles, rolebindings, clusterroles)
+   - Dangerous subresources (pods/exec, pods/portforward)
+   
+3. **Sensitive Resource Access**: Evaluate access to sensitive resources
+   - Secrets, configmaps, serviceaccounts
+   - Critical cluster resources
+   
+4. **Attack Surface Analysis**: Assess potential attack vectors
+
+SECURITY KNOWLEDGE BASE:
+- Wildcard (*) permissions are high risk
+- pods/exec and pods/portforward enable container escape
+- Access to secrets/configmaps may expose sensitive data
+- Write access to RBAC objects enables privilege escalation
+- Broad resource access violates least privilege principle
+
+Provide JSON response:
+{{
+    "excessive_permissions": [...],
+    "privilege_escalation_risks": [...],
+    "sensitive_resource_exposure": [...],
+    "attack_vectors": [...],
+    "security_score": 45,
+    "critical_issues": [...]
+}}"""
