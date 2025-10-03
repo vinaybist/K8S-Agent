@@ -67,7 +67,7 @@ Risk level (low/medium/high/critical)
 Security issues found
 Recommendations
 
-
+```
 1. Role Understanding (Step 1)
 ```
 f"""You are KubeGuard, an AI security analyst specializing in Kubernetes RBAC analysis.
