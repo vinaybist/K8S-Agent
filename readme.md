@@ -98,6 +98,8 @@ Analyze the gap between granted permissions and actual usage:
 
 ```
 4. Risk Assessment (Step 4)
+
+```
 f"""TASK: Synthesize comprehensive security risk assessment combining static and runtime analysis.
 
 STATIC ANALYSIS RESULTS:
@@ -118,7 +120,7 @@ SCORING CRITERIA:
 - Critical security issues: -25 points each
 
 [... continues with risk factors and JSON structure ...]"""
-
+```
 5. Recommendation Generation (Step 5)
 ```
 f"""TASK: Generate specific, actionable security recommendations based on comprehensive analysis.
