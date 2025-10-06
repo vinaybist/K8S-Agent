@@ -495,7 +495,7 @@ if __name__ == "__main__":
     # Check if running as MCP server (stdio) or HTTP server
     if len(sys.argv) > 1 and sys.argv[1] == "--http":
         # Run HTTP server
-        asyncio.run(run_hybrid_server())
+        asyncio.run(run_mcp_http())
     else:
         # Run as MCP server
         logger.info("Starting as MCP server (stdio)")
