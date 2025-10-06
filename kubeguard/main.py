@@ -441,12 +441,12 @@ async def run_http_api():
 
 async def run_mcp_http():
     logger.info(f"🛰️  MCP over HTTP at http://0.0.0.0:8765")
-
+    import os
     # Run FastMCP's event loop in a separate thread
     await asyncio.to_thread(
         mcp.run,
         host="0.0.0.0",
-        port=8765,
+        port=int(os.getenv("PORT", os.getenv("MCP_HTTP_PORT", "8765"))),
         transport="streamable-http"
     )
 
@@ -484,7 +484,7 @@ async def run_hybrid_server():
     # await server.serve()
     # Run FastAPI + MCP/HTTP together
     await asyncio.gather(
-        run_http_api(),
+        #run_http_api(),
         run_mcp_http()
     )
 
