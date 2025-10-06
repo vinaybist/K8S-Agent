@@ -3,7 +3,7 @@
 KubeGuard Hybrid Server
 Combines FastMCP server with HTTP API for web access
 """
-
+import uvicorn
 import json
 import logging
 from typing import Any, Dict, List, Optional
@@ -432,11 +432,34 @@ async def guided_prompts_resource() -> str:
     prompts = await get_guided_prompts()
     return json.dumps(prompts["prompts"])
 
+
+async def run_http_api():
+    logger.info("🌐 HTTP API available at http://0.0.0.0:8000  (docs: /docs)")
+    cfg = uvicorn.Config(app=app, host="0.0.0.0", port=8000, log_level="info")
+    server = uvicorn.Server(cfg)
+    await server.serve()
+
+async def run_mcp_http():
+    logger.info(f"🛰️  MCP over HTTP at http://0.0.0.0:8765")
+
+    # Run FastMCP's event loop in a separate thread
+    await asyncio.to_thread(
+        mcp.run,
+        host="0.0.0.0",
+        port=8765,
+        transport="streamable-http"
+    )
+
+
+async def run_stdio_mcp():
+    logger.info("🔧 MCP protocol available via stdio")
+    mcp.run()  # blocks; use this in a branch where you only want stdio
+
+
 # Server startup
 async def run_hybrid_server():
     """Run both MCP and HTTP servers"""
-    import uvicorn
-    
+   
     logger.info(f"Starting KubeGuard Hybrid Server v{config.server.version}")
     
     # Validate LLM setup
@@ -446,19 +469,25 @@ async def run_hybrid_server():
     except:
         logger.warning("⚠️ LLM not configured - some features may not work")
     
-    logger.info("🔧 MCP protocol available via stdio")
+    #logger.info("🔧 MCP protocol available via stdio")
     logger.info("🌐 HTTP API available at http://localhost:8000")
-    logger.info("📚 API docs at http://localhost:8000/docs")
+    logger.info("📚 MCP server is running at http://localhost:8765/mcp")
     
-    # Run HTTP server
-    config_uvicorn = uvicorn.Config(
-        app=app,
-        host="0.0.0.0", 
-        port=8000,
-        log_level="info"
+    # # Run HTTP server
+    # config_uvicorn = uvicorn.Config(
+    #     app=app,
+    #     host="0.0.0.0", 
+    #     port=8000,
+    #     log_level="info"
+    # )
+    # server = uvicorn.Server(config_uvicorn)
+    # await server.serve()
+    # Run FastAPI + MCP/HTTP together
+    await asyncio.gather(
+        run_http_api(),
+        run_mcp_http()
     )
-    server = uvicorn.Server(config_uvicorn)
-    await server.serve()
+
 
 if __name__ == "__main__":
     import sys
