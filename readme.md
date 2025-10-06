@@ -1,6 +1,6 @@
 # KubeGuard MCP Server
 
-A Model Context Protocol (MCP) server for Kubernetes Role security analysis using LLM-assisted prompt chaining, based on the KubeGuard research paper: "LLM-Assisted Kubernetes Hardening via Configuration Files and Runtime Logs Analysis."
+A Model Context Protocol (MCP) server for Kubernetes Role security analysis using LLM-assisted prompt chaining, based on the KubeGuard research paper arXiv:2509.04191: "LLM-Assisted Kubernetes Hardening via Configuration Files and Runtime Logs Analysis."
 
 ## License
 
